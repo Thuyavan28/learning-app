@@ -1,0 +1,121 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { BookOpen, Code, Play, Zap } from 'lucide-react';
+
+const Home: React.FC = () => {
+    const features = [
+        {
+            icon: <BookOpen className="w-8 h-8" />,
+            title: 'Comprehensive Learning',
+            description: '25+ algorithms with detailed explanations, pros & cons, and real-world applications'
+        },
+        {
+            icon: <Play className="w-8 h-8" />,
+            title: 'Interactive Animations',
+            description: 'Watch algorithms execute step-by-step with synchronized visualizations'
+        },
+        {
+            icon: <Code className="w-8 h-8" />,
+            title: 'Live Code Execution',
+            description: 'Run Python code directly in your browser and see instant results'
+        },
+        {
+            icon: <Zap className="w-8 h-8" />,
+            title: 'Hands-On Learning',
+            description: 'Modify inputs, experiment with values, and understand algorithm behavior'
+        }
+    ];
+
+    const categories = [
+        { name: 'Searching & Sorting', count: 7, color: 'bg-blue-600', link: '/algorithm/linear-search' },
+        { name: 'Graph Algorithms', count: 6, color: 'bg-green-600', link: '/algorithm/bfs' },
+        { name: 'Algorithm Design', count: 2, color: 'bg-purple-600', link: '/algorithm/divide-conquer' },
+        { name: 'Advanced Algorithms', count: 3, color: 'bg-pink-600', link: '/algorithm/tsp-exact' },
+        { name: 'CPU Scheduling', count: 5, color: 'bg-orange-600', link: '/algorithm/fcfs' }
+    ];
+
+    return (
+        <div className="min-h-screen bg-dark-bg">
+            {/* Hero Section */}
+            <div className="bg-dark-surface border-b border-dark-border">
+                <div className="max-w-6xl mx-auto px-8 py-16">
+                    <div className="text-center">
+                        <h1 className="text-5xl font-bold text-gray-100 mb-4">
+                            Master Algorithms Through
+                            <span className="text-primary-500"> Interactive Learning</span>
+                        </h1>
+                        <p className="text-xl text-gray-400 mb-8 max-w-3xl mx-auto">
+                            A comprehensive platform for computer science students to understand algorithms deeply through visualizations, live code execution, and hands-on experimentation.
+                        </p>
+                        <div className="flex gap-4 justify-center">
+                            <Link to="/algorithm/linear-search" className="btn btn-primary text-lg px-8 py-3">
+                                Start Learning
+                            </Link>
+                            <a href="#categories" className="btn btn-secondary text-lg px-8 py-3">
+                                Explore Topics
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Features Section */}
+            <div className="max-w-6xl mx-auto px-8 py-16">
+                <h2 className="text-3xl font-bold text-gray-100 mb-12 text-center">
+                    Why Choose AlgoLearn?
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {features.map((feature, index) => (
+                        <div key={index} className="card hover:border-primary-500 transition-all">
+                            <div className="text-primary-500 mb-4">{feature.icon}</div>
+                            <h3 className="text-lg font-semibold text-gray-100 mb-2">{feature.title}</h3>
+                            <p className="text-gray-400 text-sm">{feature.description}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Categories Section */}
+            <div id="categories" className="max-w-6xl mx-auto px-8 py-16">
+                <h2 className="text-3xl font-bold text-gray-100 mb-12 text-center">
+                    Algorithm Categories
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {categories.map((category, index) => (
+                        <Link
+                            key={index}
+                            to={category.link}
+                            className="card hover:border-primary-500 transition-all group cursor-pointer"
+                        >
+                            <div className="flex items-center justify-between mb-4">
+                                <div className={`w-12 h-12 ${category.color} rounded-lg flex items-center justify-center text-white font-bold text-xl`}>
+                                    {category.count}
+                                </div>
+                                <span className="text-gray-400 group-hover:text-primary-500 transition-colors">→</span>
+                            </div>
+                            <h3 className="text-xl font-semibold text-gray-100 mb-2">{category.name}</h3>
+                            <p className="text-gray-400 text-sm">{category.count} algorithms to master</p>
+                        </Link>
+                    ))}
+                </div>
+            </div>
+
+            {/* CTA Section */}
+            <div className="bg-dark-surface border-t border-dark-border">
+                <div className="max-w-6xl mx-auto px-8 py-16 text-center">
+                    <h2 className="text-3xl font-bold text-gray-100 mb-4">
+                        Ready to Master Algorithms?
+                    </h2>
+                    <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
+                        Start your journey with Linear Search and progress through 25+ algorithms with interactive visualizations and live code execution.
+                    </p>
+                    <Link to="/algorithm/linear-search" className="btn btn-primary text-lg px-8 py-3">
+                        Begin Your Journey
+                    </Link>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Home;

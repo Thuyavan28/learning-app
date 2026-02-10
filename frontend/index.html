@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AlgoLearn - Interactive Algorithm Learning Platform</title>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+</head>
+
+<body style="background-color: #0f172a !important; color: #fff !important;">
+  <div id="root"></div>
+  <script>
+    window.onerror = function (message, source, lineno, colno, error) {
+      console.error('Global JS Error:', message);
+      document.body.innerHTML += '<div style="color: red; padding: 20px; border: 1px solid red; margin: 20px; background: white;"><h3>JS Error:</h3><pre>' + message + '\n' + source + ':' + lineno + '</pre></div>';
+    };
+  </script>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>

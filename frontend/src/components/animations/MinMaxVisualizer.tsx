@@ -1,0 +1,95 @@
+import React from 'react';
+
+interface MinMaxVisualizerProps {
+    array: number[];
+    low: number;
+    high: number;
+    mid?: number;
+    min?: number;
+    max?: number;
+    message: string;
+    depth?: number;
+}
+
+const MinMaxVisualizer: React.FC<MinMaxVisualizerProps> = ({
+    array,
+    low,
+    high,
+    mid,
+    min,
+    max,
+    message,
+    depth = 0
+}) => {
+    return (
+        <div className="space-y-6">
+            <div className="bg-slate-950 border border-slate-700 rounded-lg p-4 text-center">
+                <p className="text-gray-300 font-mono text-sm">{message}</p>
+                <div className="flex justify-center gap-8 mt-2 text-xs text-gray-400">
+                    <span>Range: [{low}, {high}]</span>
+                    {min !== undefined && <span className="text-green-400">Current Min: {min}</span>}
+                    {max !== undefined && <span className="text-red-400">Current Max: {max}</span>}
+                </div>
+            </div>
+
+            <div className="flex justify-center items-end gap-2 h-64 bg-slate-900/50 p-4 rounded-lg border border-slate-800 overflow-x-auto">
+                {array.map((value, idx) => {
+                    let bgColor = 'bg-slate-700'; // Default inactive
+                    let borderColor = 'border-slate-600';
+                    let height = Math.max(20, (value / Math.max(...array)) * 100);
+
+                    // Visualize state
+                    if (idx >= low && idx <= high) {
+                        bgColor = 'bg-blue-500';
+                        borderColor = 'border-blue-400';
+
+                        // Left/Right split visualization
+                        if (mid !== undefined) {
+                            if (idx <= mid) {
+                                bgColor = 'bg-indigo-500'; // Left half
+                            } else {
+                                bgColor = 'bg-violet-500'; // Right half
+                            }
+                        }
+                    }
+
+                    return (
+                        <div key={idx} className="flex flex-col items-center gap-2 group relative">
+                            <span className="text-xs text-gray-500 font-mono">{idx}</span>
+                            <div
+                                className={`w-12 rounded-t-lg border-2 transition-all duration-300 ${bgColor} ${borderColor} flex items-end justify-center`}
+                                style={{ height: `${height}%` }}
+                            >
+                                <span className="mb-2 text-white font-bold shadow-black drop-shadow-md">{value}</span>
+                            </div>
+
+                            {/* Helpers */}
+                            <div className="absolute -bottom-6 flex flex-col items-center">
+                                {idx === low && <span className="text-[10px] text-cyan-400">L</span>}
+                                {idx === high && <span className="text-[10px] text-cyan-400">H</span>}
+                                {idx === mid && <span className="text-[10px] text-yellow-400">M</span>}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+
+            <div className="flex justify-center gap-4 text-sm">
+                <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-indigo-500 rounded"></div>
+                    <span className="text-gray-400">Left Half</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-violet-500 rounded"></div>
+                    <span className="text-gray-400">Right Half</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-slate-700 rounded"></div>
+                    <span className="text-gray-400">Inactive</span>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default MinMaxVisualizer;

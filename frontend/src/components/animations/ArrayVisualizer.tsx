@@ -1,0 +1,143 @@
+import React, { useState, useEffect } from 'react';
+import { Play, Pause, RotateCcw, SkipForward } from 'lucide-react';
+
+interface ArrayVisualizerProps {
+    array: number[];
+    currentIndex?: number;
+    comparingIndices?: number[];
+    sortedIndices?: number[];
+    swappingIndices?: number[];
+    message?: string;
+    isPlaying?: boolean;
+    onPlayPause?: () => void;
+    onReset?: () => void;
+    onStep?: () => void;
+    speed?: number;
+    onSpeedChange?: (speed: number) => void;
+}
+
+const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({
+    array,
+    currentIndex,
+    comparingIndices = [],
+    sortedIndices = [],
+    swappingIndices = [],
+    message = '',
+    isPlaying = false,
+    onPlayPause,
+    onReset,
+    onStep,
+    speed = 1,
+    onSpeedChange,
+}) => {
+    const getElementClass = (index: number) => {
+        if (swappingIndices.includes(index)) return 'array-element swapping';
+        if (sortedIndices.includes(index)) return 'array-element sorted';
+        if (comparingIndices.includes(index)) return 'array-element comparing';
+        if (currentIndex === index) return 'array-element active';
+        return 'array-element';
+    };
+
+    const maxValue = Math.max(...array);
+
+    return (
+        <div className="space-y-4">
+            {/* Controls */}
+            <div className="flex items-center justify-between bg-dark-elevated rounded-lg p-4 border border-dark-border">
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={onPlayPause}
+                        className="btn btn-primary flex items-center gap-2"
+                        disabled={!onPlayPause}
+                    >
+                        {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                        {isPlaying ? 'Pause' : 'Play'}
+                    </button>
+                    <button
+                        onClick={onStep}
+                        className="btn btn-secondary flex items-center gap-2"
+                        disabled={!onStep || isPlaying}
+                    >
+                        <SkipForward className="w-4 h-4" />
+                        Step
+                    </button>
+                    <button
+                        onClick={onReset}
+                        className="btn btn-secondary flex items-center gap-2"
+                        disabled={!onReset}
+                    >
+                        <RotateCcw className="w-4 h-4" />
+                        Reset
+                    </button>
+                </div>
+
+                {onSpeedChange && (
+                    <div className="flex items-center gap-3">
+                        <span className="text-sm text-gray-400">Speed:</span>
+                        <input
+                            type="range"
+                            min="0.5"
+                            max="3"
+                            step="0.5"
+                            value={speed}
+                            onChange={(e) => onSpeedChange(parseFloat(e.target.value))}
+                            className="w-32"
+                        />
+                        <span className="text-sm text-gray-300 w-8">{speed}x</span>
+                    </div>
+                )}
+            </div>
+
+            {/* Message Display */}
+            {message && (
+                <div className="bg-primary-900/30 border border-primary-500 rounded-lg p-3">
+                    <p className="text-primary-200 text-sm font-medium">{message}</p>
+                </div>
+            )}
+
+            {/* Array Visualization */}
+            <div className="bg-dark-elevated rounded-lg p-8 border border-dark-border">
+                <div className="flex items-end justify-center gap-2 min-h-[300px]">
+                    {array.map((value, index) => {
+                        const height = (value / maxValue) * 250;
+                        return (
+                            <div key={index} className="flex flex-col items-center gap-2">
+                                {/* Bar */}
+                                <div
+                                    className={`${getElementClass(index)} w-16 flex items-end justify-center rounded-t-lg transition-all duration-300`}
+                                    style={{ height: `${height}px` }}
+                                >
+                                    <span className="text-white font-bold mb-2">{value}</span>
+                                </div>
+                                {/* Index */}
+                                <span className="text-xs text-gray-500 font-mono">i={index}</span>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* Legend */}
+            <div className="flex flex-wrap gap-4 justify-center text-sm">
+                <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-primary-500 bg-primary-900/30 rounded"></div>
+                    <span className="text-gray-400">Current</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-yellow-500 bg-yellow-900/30 rounded"></div>
+                    <span className="text-gray-400">Comparing</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-red-500 bg-red-900/30 rounded"></div>
+                    <span className="text-gray-400">Swapping</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-green-500 bg-green-900/30 rounded"></div>
+                    <span className="text-gray-400">Sorted</span>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default ArrayVisualizer;
